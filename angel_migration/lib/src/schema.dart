@@ -8,11 +8,9 @@ abstract class Schema {
     tableNames.forEach(drop);
   }
 
-  void ifExists(String tableName, void callback(Schema schema));
-
-  void ifNotExists(String tableName, void callback(Schema schema));
-
   void create(String tableName, void callback(Table table));
 
-  void update(String tableName, void callback(Table table));
+  void createIfNotExists(String tableName, void callback(Table table));
+
+  void alter(String tableName, void callback(Table table));
 }

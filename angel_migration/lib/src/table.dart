@@ -25,3 +25,12 @@ abstract class Table {
         name, new Column(type: ColumnType.VAR_CHAR, length: length));
   }
 }
+
+abstract class MutableTable extends Table {
+  void rename(String newName);
+  void dropColumn(String name);
+  void renameColumn(String name, String newName);
+  void changeColumnType(String name, ColumnType type);
+  void dropNotNull(String name);
+  void setNotNull(String name);
+}

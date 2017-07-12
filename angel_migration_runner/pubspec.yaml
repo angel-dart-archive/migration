@@ -1,0 +1,6 @@
+name: angel_migration_runner
+dependencies:
+  angel_migration:
+    path: ../angel_migration
+  args: ">=0.13.4 <2.0.0"
+  postgres: ^0.9.5
