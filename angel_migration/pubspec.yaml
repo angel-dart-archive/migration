@@ -1,3 +1,9 @@
 name: angel_migration
+version: 1.0.0-alpha
+description: Database migration runtime for Angel's ORM.
+author: Tobe O <thosakwe@gmail.com>
+homepage: https://github.com/angel-dart/migration
+environment:
+  sdk: ">=1.19.0"
 dependencies:
   angel_orm: ^1.0.0-alpha

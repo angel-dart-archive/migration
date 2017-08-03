@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration/build" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration/example/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/build" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/example/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/packages" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
+  </component>
+</module>
