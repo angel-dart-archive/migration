@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:angel_migration/angel_migration.dart';
-import 'table.dart';
+import 'package:postgres/postgres.dart';
+import 'package:angel_migration_runner/src/postgres/table.dart';
 
 class PostgresSchema extends Schema {
   final int _indent;
@@ -7,7 +9,9 @@ class PostgresSchema extends Schema {
 
   PostgresSchema._(this._buf, this._indent);
 
-  factory PostgresSchema.root() => new PostgresSchema._(new StringBuffer(), 0);
+  factory PostgresSchema() => new PostgresSchema._(new StringBuffer(), 0);
+
+  Future run(PostgreSQLConnection connection) => connection.execute(compile());
 
   String compile() => _buf.toString();
 

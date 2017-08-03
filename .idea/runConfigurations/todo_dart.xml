@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="todo.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" singleton="true" nameIsGenerated="true">
+    <option name="arguments" value="up" />
+    <option name="filePath" value="$PROJECT_DIR$/angel_migration_runner/example/todo.dart" />
+    <option name="workingDirectory" value="$PROJECT_DIR$/angel_migration_runner" />
+    <method />
+  </configuration>
+</component>

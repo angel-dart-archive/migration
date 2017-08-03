@@ -1,0 +1,125 @@
+import 'dart:async';
+import 'package:angel_migration/angel_migration.dart';
+import 'package:postgres/postgres.dart';
+import '../runner.dart';
+import '../util.dart';
+import 'schema.dart';
+
+class PostgresMigrationRunner implements MigrationRunner {
+  bool _connected = false;
+  final Map<String, Migration> migrations = {};
+  final PostgreSQLConnection connection;
+
+  PostgresMigrationRunner(this.connection, [Iterable<Migration> migrations = const []]) {
+    if (migrations?.isNotEmpty == true)
+      migrations.forEach(addMigration);
+  }
+
+  @override
+  void addMigration(Migration migration) {
+    migrations.putIfAbsent(
+        absoluteSourcePath(migration.runtimeType), () => migration);
+  }
+
+  Future _init() async {
+    if (!_connected) {
+      await connection.open();
+      _connected = true;
+    }
+
+    await connection.execute('''
+    CREATE TABLE IF NOT EXISTS "migrations" (
+      id serial,
+      batch integer,
+      path varchar,
+      PRIMARY KEY(id)
+    );
+    ''');
+  }
+
+  @override
+  Future up() async {
+    await _init();
+    var r = await connection.query('SELECT path from migrations;');
+    Iterable<String> existing = r.expand((x) => x);
+    List<String> toRun = [];
+
+    migrations.forEach((k, v) {
+      if (!existing.contains(k)) toRun.add(k);
+    });
+
+    if (toRun.isNotEmpty) {
+      var r = await connection.query('SELECT MAX(batch) from migrations;');
+      int curBatch = r[0][0] ?? 0;
+      int batch = curBatch + 1;
+
+      for (var k in toRun) {
+        var migration = migrations[k];
+        var schema = new PostgresSchema();
+        migration.up(schema);
+        print('Bringing up "$k"...');
+        return schema.run(connection).then((_) {
+          return connection.execute(
+              'INSERT INTO MIGRATIONS (batch, path) VALUES ($batch, "$k");');
+        });
+      }
+    }
+  }
+
+  @override
+  Future rollback() async {
+    await _init();
+
+    var r = await connection.query('SELECT MAX(batch) from migrations;');
+    int curBatch = r[0][0] ?? 0;
+
+    r = await connection
+        .query('SELECT path from migrations WHERE batch = $curBatch;');
+    Iterable<String> existing = r.expand((x) => x);
+    List<String> toRun = [];
+
+    migrations.forEach((k, v) {
+      if (existing.contains(k)) toRun.add(k);
+    });
+
+    if (toRun.isNotEmpty) {
+      for (var k in toRun) {
+        var migration = migrations[k];
+        var schema = new PostgresSchema();
+        migration.down(schema);
+        print('Bringing down "$k"...');
+        return schema.run(connection).then((_) {
+          return connection
+              .execute('DELETE FROM migrations WHERE path = "$k";');
+        });
+      }
+    }
+  }
+
+  @override
+  Future reset() async {
+    await _init();
+    var r = await connection.query('SELECT path from migrations;');
+    Iterable<String> existing = r.expand((x) => x);
+    List<String> toRun = [];
+
+    migrations.forEach((k, v) {
+      if (existing.contains(k)) toRun.add(k);
+    });
+
+    if (toRun.isNotEmpty) {
+      for (var k in toRun) {
+        var migration = migrations[k];
+        var schema = new PostgresSchema();
+        migration.down(schema);
+        print('Bringing down "$k"...');
+        return schema.run(connection).then((_) {
+          return connection
+              .execute('DELETE FROM migrations WHERE path = "$k";');
+        });
+      }
+    }
+
+    return await up();
+  }
+}
