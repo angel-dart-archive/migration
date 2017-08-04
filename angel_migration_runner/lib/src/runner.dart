@@ -9,4 +9,6 @@ abstract class MigrationRunner {
   Future rollback();
 
   Future reset();
+
+  Future close();
 }

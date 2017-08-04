@@ -19,7 +19,8 @@ class PostgresMigrationRunner implements MigrationRunner {
   @override
   void addMigration(Migration migration) {
     migrations.putIfAbsent(
-        absoluteSourcePath(migration.runtimeType), () => migration);
+        absoluteSourcePath(migration.runtimeType).replaceAll("\\", "\\\\"),
+        () => migration);
   }
 
   Future _init() async {
@@ -59,11 +60,13 @@ class PostgresMigrationRunner implements MigrationRunner {
         var schema = new PostgresSchema();
         migration.up(schema);
         print('Bringing up "$k"...');
-        return schema.run(connection).then((_) {
+        await schema.run(connection).then((_) {
           return connection.execute(
-              'INSERT INTO MIGRATIONS (batch, path) VALUES ($batch, "$k");');
+              'INSERT INTO MIGRATIONS (batch, path) VALUES ($batch, \'$k\');');
         });
       }
+    } else {
+      print('No migrations found to bring up.');
     }
   }
 
@@ -73,7 +76,6 @@ class PostgresMigrationRunner implements MigrationRunner {
 
     var r = await connection.query('SELECT MAX(batch) from migrations;');
     int curBatch = r[0][0] ?? 0;
-
     r = await connection
         .query('SELECT path from migrations WHERE batch = $curBatch;');
     Iterable<String> existing = r.expand((x) => x);
@@ -89,11 +91,13 @@ class PostgresMigrationRunner implements MigrationRunner {
         var schema = new PostgresSchema();
         migration.down(schema);
         print('Bringing down "$k"...');
-        return schema.run(connection).then((_) {
+        await schema.run(connection).then((_) {
           return connection
-              .execute('DELETE FROM migrations WHERE path = "$k";');
+              .execute('DELETE FROM migrations WHERE path = \'$k\';');
         });
       }
+    } else {
+      print('No migrations found to roll back.');
     }
   }
 
@@ -114,13 +118,18 @@ class PostgresMigrationRunner implements MigrationRunner {
         var schema = new PostgresSchema();
         migration.down(schema);
         print('Bringing down "$k"...');
-        return schema.run(connection).then((_) {
+        await schema.run(connection).then((_) {
           return connection
-              .execute('DELETE FROM migrations WHERE path = "$k";');
+              .execute('DELETE FROM migrations WHERE path = \'$k\';');
         });
       }
+    } else {
+      print('No migrations found to roll back.');
     }
+  }
 
-    return await up();
+  @override
+  Future close() {
+    return connection.close();
   }
 }

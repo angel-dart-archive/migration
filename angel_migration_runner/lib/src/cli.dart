@@ -6,9 +6,10 @@ import 'runner.dart';
 Future runMigrations(MigrationRunner migrationRunner, List<String> args) {
   var cmd = new CommandRunner('migration_runner', 'Executes Angel migrations.')
     ..addCommand(new _UpCommand(migrationRunner))
+    ..addCommand(new _RefreshCommand(migrationRunner))
     ..addCommand(new _ResetCommand(migrationRunner))
     ..addCommand(new _RollbackCommand(migrationRunner));
-  return cmd.run(args);
+  return cmd.run(args).then((_) => migrationRunner.close());
 }
 
 class _UpCommand extends Command {
@@ -29,6 +30,20 @@ class _ResetCommand extends Command {
   _ResetCommand(this.migrationRunner);
 
   String get name => 'reset';
+  String get description => 'Resets the database.';
+
+  final MigrationRunner migrationRunner;
+
+  @override
+  run() {
+    return migrationRunner.reset();
+  }
+}
+
+class _RefreshCommand extends Command {
+  _RefreshCommand(this.migrationRunner);
+
+  String get name => 'refresh';
   String get description =>
       'Resets the database, and then re-runs all migrations.';
 
@@ -36,7 +51,7 @@ class _ResetCommand extends Command {
 
   @override
   run() {
-    return migrationRunner.reset();
+    return migrationRunner.reset().then((_) => migrationRunner.up());
   }
 }
 
