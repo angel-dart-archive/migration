@@ -10,9 +10,10 @@ class PostgresMigrationRunner implements MigrationRunner {
   final Map<String, Migration> migrations = {};
   final PostgreSQLConnection connection;
 
-  PostgresMigrationRunner(this.connection, [Iterable<Migration> migrations = const []]) {
-    if (migrations?.isNotEmpty == true)
-      migrations.forEach(addMigration);
+  PostgresMigrationRunner(this.connection,
+      {Iterable<Migration> migrations = const [], bool connected: false}) {
+    if (migrations?.isNotEmpty == true) migrations.forEach(addMigration);
+    _connected = connected == true;
   }
 
   @override

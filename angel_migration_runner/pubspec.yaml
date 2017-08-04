@@ -1,5 +1,5 @@
 name: angel_migration_runner
-version: 1.0.0-alpha
+version: 1.0.0-alpha+1
 description: Database migration runner for Angel's ORM.
 author: Tobe O <thosakwe@gmail.com>
 homepage: https://github.com/angel-dart/migration
