@@ -17,6 +17,7 @@ abstract class PostgresGenerator {
     if (column.nullable == false) buf.write(' NOT NULL');
 
     if (column.index == IndexType.UNIQUE) buf.write(' UNIQUE');
+    else if (column.index == IndexType.PRIMARY_KEY) buf.write(' PRIMARY KEY');
 
     for (var ref in column.externalReferences) {
       buf.write(' ' + compileReference(ref));

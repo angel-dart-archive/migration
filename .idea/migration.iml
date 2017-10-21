@@ -4,12 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/angel_migration/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/angel_migration/build" />
-      <excludeFolder url="file://$MODULE_DIR$/angel_migration/example/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/angel_migration/packages" />
       <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/build" />
-      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/example/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/angel_migration_runner/packages" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
