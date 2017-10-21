@@ -24,8 +24,9 @@ class PostgresSchema extends Schema {
   }
 
   @override
-  void drop(String tableName) {
-    _writeln('DROP TABLE "$tableName";');
+  void drop(String tableName, {bool cascade: false}) {
+    var c = cascade == true ? ' CASCADE': '';
+    _writeln('DROP TABLE "$tableName"$c;');
   }
 
   @override
