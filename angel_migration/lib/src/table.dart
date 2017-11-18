@@ -11,11 +11,17 @@ abstract class Table {
 
   MigrationColumn integer(String name) => declare(name, ColumnType.INT);
 
+  MigrationColumn float(String name) => declare(name, ColumnType.FLOAT);
+
+  MigrationColumn numeric(String name) => declare(name, ColumnType.NUMERIC);
+
   MigrationColumn boolean(String name) => declare(name, ColumnType.SERIAL);
 
   MigrationColumn date(String name) => declare(name, ColumnType.SERIAL);
 
   MigrationColumn dateTime(String name) => declare(name, ColumnType.SERIAL);
+
+  MigrationColumn timeStamp(String name) => declare(name, ColumnType.DATE_TIME);
 
   MigrationColumn text(String name) => declare(name, ColumnType.SERIAL);
 
