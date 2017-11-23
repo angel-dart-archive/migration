@@ -15,13 +15,18 @@ abstract class Table {
 
   MigrationColumn numeric(String name) => declare(name, ColumnType.NUMERIC);
 
-  MigrationColumn boolean(String name) => declare(name, ColumnType.SERIAL);
+  MigrationColumn boolean(String name) => declare(name, ColumnType.BOOLEAN);
 
-  MigrationColumn date(String name) => declare(name, ColumnType.SERIAL);
+  MigrationColumn date(String name) => declare(name, ColumnType.DATE);
 
-  MigrationColumn dateTime(String name) => declare(name, ColumnType.SERIAL);
+  @deprecated
+  MigrationColumn dateTime(String name) => timeStamp(name, timezone: true);
 
-  MigrationColumn timeStamp(String name) => declare(name, ColumnType.DATE_TIME);
+  MigrationColumn timeStamp(String name, {bool timezone: false}) {
+    if (timezone != true)
+      return declare(name, ColumnType.TIME_STAMP);
+    return declare(name, ColumnType.TIME_STAMP_WITH_TIME_ZONE);
+  }
 
   MigrationColumn text(String name) => declare(name, ColumnType.SERIAL);
 
