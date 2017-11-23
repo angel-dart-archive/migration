@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:angel_migration/angel_migration.dart';
 import 'package:postgres/postgres.dart';
 import '../runner.dart';
@@ -6,9 +7,10 @@ import '../util.dart';
 import 'schema.dart';
 
 class PostgresMigrationRunner implements MigrationRunner {
-  bool _connected = false;
   final Map<String, Migration> migrations = {};
   final PostgreSQLConnection connection;
+  final Queue<Migration> _migrationQueue = new Queue();
+  bool _connected = false;
 
   PostgresMigrationRunner(this.connection,
       {Iterable<Migration> migrations = const [], bool connected: false}) {
@@ -18,12 +20,16 @@ class PostgresMigrationRunner implements MigrationRunner {
 
   @override
   void addMigration(Migration migration) {
-    migrations.putIfAbsent(
-        absoluteSourcePath(migration.runtimeType).replaceAll("\\", "\\\\"),
-        () => migration);
+    _migrationQueue.addLast(migration);
   }
 
   Future _init() async {
+    while (_migrationQueue.isNotEmpty) {
+      var migration = _migrationQueue.removeFirst();
+      var path = await absoluteSourcePath(migration.runtimeType);
+      migrations.putIfAbsent(path.replaceAll("\\", "\\\\"), () => migration);
+    }
+
     if (!_connected) {
       await connection.open();
       _connected = true;

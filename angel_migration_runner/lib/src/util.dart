@@ -1,6 +1,14 @@
+import 'dart:async';
+import 'dart:isolate';
 import 'dart:mirrors';
 
-String absoluteSourcePath(Type type) {
+Future<String> absoluteSourcePath(Type type) async {
   var mirror = reflectType(type);
-  return mirror.location.sourceUri.toFilePath();
+  var uri = mirror.location.sourceUri;
+
+  if (uri.scheme == 'package') {
+    uri = await Isolate.resolvePackageUri(uri);
+  }
+
+  return uri.toFilePath();
 }
