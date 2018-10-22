@@ -1,3 +1,6 @@
+# 2.0.0-alpha
+* Dart 2 update.
+
 # 1.0.0-alpha+5
 `Schema#drop` now has a named `cascade` parameter, of type `bool`.
 

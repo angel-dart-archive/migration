@@ -49,7 +49,7 @@ class PostgresMigrationRunner implements MigrationRunner {
   Future up() async {
     await _init();
     var r = await connection.query('SELECT path from migrations;');
-    Iterable<String> existing = r.expand((x) => x);
+    Iterable<String> existing = r.expand((x) => x as Iterable<String>);
     List<String> toRun = [];
 
     migrations.forEach((k, v) {
@@ -84,7 +84,7 @@ class PostgresMigrationRunner implements MigrationRunner {
     int curBatch = r[0][0] ?? 0;
     r = await connection
         .query('SELECT path from migrations WHERE batch = $curBatch;');
-    Iterable<String> existing = r.expand((x) => x);
+    Iterable<String> existing = r.expand((x) => x as Iterable<String>);
     List<String> toRun = [];
 
     migrations.forEach((k, v) {
@@ -111,7 +111,7 @@ class PostgresMigrationRunner implements MigrationRunner {
   Future reset() async {
     await _init();
     var r = await connection.query('SELECT path from migrations;');
-    Iterable<String> existing = r.expand((x) => x);
+    Iterable<String> existing = r.expand((x) => x as Iterable<String>);
     List<String> toRun = [];
 
     migrations.forEach((k, v) {

@@ -7,10 +7,10 @@ class MigrationColumn extends Column {
   dynamic _defaultValue;
 
   @override
-  bool get nullable => _nullable;
+  bool get isNullable => _nullable;
 
   @override
-  IndexType get index => _index;
+  IndexType get indexType => _index;
 
   @override
   get defaultValue => _defaultValue;
@@ -19,28 +19,28 @@ class MigrationColumn extends Column {
       new List<MigrationColumnReference>.unmodifiable(_references);
 
   MigrationColumn(ColumnType type,
-      {bool nullable: true, int length, IndexType index, defaultValue})
+      {bool isNullable: true, int length, IndexType indexType, defaultValue})
       : super(type: type, length: length) {
-    _nullable = nullable;
-    _index = index;
+    _nullable = isNullable;
+    _index = indexType;
     _defaultValue = defaultValue;
   }
 
   factory MigrationColumn.from(Column column) => column is MigrationColumn
       ? column
       : new MigrationColumn(column.type,
-          nullable: column.nullable,
+          isNullable: column.isNullable,
           length: column.length,
-          index: column.index,
+          indexType: column.indexType,
           defaultValue: column.defaultValue);
 
   MigrationColumn notNull() => this.._nullable = false;
 
   MigrationColumn defaultsTo(value) => this.._defaultValue = value;
 
-  MigrationColumn unique() => this.._index = IndexType.UNIQUE;
+  MigrationColumn unique() => this.._index = IndexType.unique;
 
-  MigrationColumn primaryKey() => this.._index = IndexType.PRIMARY_KEY;
+  MigrationColumn primaryKey() => this.._index = IndexType.primaryKey;
 
   MigrationColumnReference references(String foreignTable, String foreignKey) {
     var ref = new MigrationColumnReference._(foreignTable, foreignKey);
@@ -57,8 +57,8 @@ class MigrationColumnReference {
 
   String get behavior => _behavior;
 
-  StateError _locked() => new StateError(
-      'Cannot override existing "$_behavior" behavior.');
+  StateError _locked() =>
+      new StateError('Cannot override existing "$_behavior" behavior.');
 
   void onDeleteCascade() {
     if (_behavior != null) throw _locked();

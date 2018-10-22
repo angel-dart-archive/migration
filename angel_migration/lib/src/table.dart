@@ -7,33 +7,32 @@ abstract class Table {
   MigrationColumn declare(String name, ColumnType type) =>
       declareColumn(name, new MigrationColumn(type));
 
-  MigrationColumn serial(String name) => declare(name, ColumnType.SERIAL);
+  MigrationColumn serial(String name) => declare(name, ColumnType.serial);
 
-  MigrationColumn integer(String name) => declare(name, ColumnType.INT);
+  MigrationColumn integer(String name) => declare(name, ColumnType.int);
 
-  MigrationColumn float(String name) => declare(name, ColumnType.FLOAT);
+  MigrationColumn float(String name) => declare(name, ColumnType.float);
 
-  MigrationColumn numeric(String name) => declare(name, ColumnType.NUMERIC);
+  MigrationColumn numeric(String name) => declare(name, ColumnType.numeric);
 
-  MigrationColumn boolean(String name) => declare(name, ColumnType.BOOLEAN);
+  MigrationColumn boolean(String name) => declare(name, ColumnType.boolean);
 
-  MigrationColumn date(String name) => declare(name, ColumnType.DATE);
+  MigrationColumn date(String name) => declare(name, ColumnType.date);
 
   @deprecated
   MigrationColumn dateTime(String name) => timeStamp(name, timezone: true);
 
   MigrationColumn timeStamp(String name, {bool timezone: false}) {
-    if (timezone != true)
-      return declare(name, ColumnType.TIME_STAMP);
-    return declare(name, ColumnType.TIME_STAMP_WITH_TIME_ZONE);
+    if (timezone != true) return declare(name, ColumnType.timeStamp);
+    return declare(name, ColumnType.timeStampWithTimeZone);
   }
 
-  MigrationColumn text(String name) => declare(name, ColumnType.SERIAL);
+  MigrationColumn text(String name) => declare(name, ColumnType.serial);
 
   MigrationColumn varchar(String name, {int length}) {
-    if (length == null) return declare(name, ColumnType.VAR_CHAR);
+    if (length == null) return declare(name, ColumnType.varChar);
     return declareColumn(
-        name, new Column(type: ColumnType.VAR_CHAR, length: length));
+        name, new Column(type: ColumnType.varChar, length: length));
   }
 }
 

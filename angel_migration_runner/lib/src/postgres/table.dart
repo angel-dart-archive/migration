@@ -14,10 +14,12 @@ abstract class PostgresGenerator {
   static String compileColumn(MigrationColumn column) {
     var buf = new StringBuffer(columnType(column));
 
-    if (column.nullable == false) buf.write(' NOT NULL');
+    if (column.isNullable == false) buf.write(' NOT NULL');
 
-    if (column.index == IndexType.UNIQUE) buf.write(' UNIQUE');
-    else if (column.index == IndexType.PRIMARY_KEY) buf.write(' PRIMARY KEY');
+    if (column.indexType == IndexType.unique)
+      buf.write(' UNIQUE');
+    else if (column.indexType == IndexType.primaryKey)
+      buf.write(' PRIMARY KEY');
 
     for (var ref in column.externalReferences) {
       buf.write(' ' + compileReference(ref));
@@ -35,7 +37,7 @@ abstract class PostgresGenerator {
 }
 
 class PostgresTable extends Table {
-  final Map<String, Column> _columns = {};
+  final Map<String, MigrationColumn> _columns = {};
 
   @override
   MigrationColumn declareColumn(String name, Column column) {
@@ -63,7 +65,7 @@ class PostgresTable extends Table {
 }
 
 class PostgresAlterTable extends Table implements MutableTable {
-  final Map<String, Column> _columns = {};
+  final Map<String, MigrationColumn> _columns = {};
   final String tableName;
   final Queue<String> _stack = new Queue<String>();
 
@@ -121,8 +123,8 @@ class PostgresAlterTable extends Table implements MutableTable {
   @override
   void changeColumnType(String name, ColumnType type, {int length}) {
     _stack.add('ALTER COLUMN "$name" TYPE ' +
-        PostgresGenerator
-            .columnType(new MigrationColumn(type, length: length)));
+        PostgresGenerator.columnType(
+            new MigrationColumn(type, length: length)));
   }
 
   @override
