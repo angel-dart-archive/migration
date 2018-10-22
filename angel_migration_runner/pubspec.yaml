@@ -6,7 +6,7 @@ homepage: https://github.com/angel-dart/migration
 environment:
   sdk: ">=2.0.0-dev <3.0.0"
 dependencies:
-  angel_migration:
-    path: ../angel_migration
+  angel_migration: ^2.0.0-alpha
+  angel_orm: ^2.0.0-dev.2
   args: ^1.0.0
   postgres: ">=0.9.5 <2.0.0"
