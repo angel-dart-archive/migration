@@ -11,8 +11,8 @@ class UserMigration implements Migration {
     schema.create('users', (table) {
       table
         ..serial('id').primaryKey()
-        ..varchar('username', length: 32).unique()
-        ..varchar('password')
+        ..varChar('username', length: 32).unique()
+        ..varChar('password')
         ..boolean('account_confirmed').defaultsTo(false);
     });
   }
@@ -30,7 +30,7 @@ class TodoMigration implements Migration {
       table
         ..serial('id').primaryKey()
         ..integer('user_id').references('user', 'id').onDeleteCascade()
-        ..varchar('text')
+        ..varChar('text')
         ..boolean('completed').defaultsTo(false);
     });
   }
