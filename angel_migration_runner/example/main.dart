@@ -1,15 +1,14 @@
-import 'package:angel_migration/angel_migration.dart';
-import 'package:angel_model/angel_model.dart';
-import 'package:angel_orm/angel_orm.dart';
-import 'package:angel_serialize/angel_serialize.dart';
-part 'main.g.dart';
+import 'package:angel_migration_runner/angel_migration_runner.dart';
+import 'package:angel_migration_runner/postgres.dart';
+import 'package:postgres/postgres.dart';
+import '../../angel_migration/example/todo.dart';
 
-@serializable
-@orm
-abstract class _Book extends Model {
-   String get title;
+var migrationRunner = new PostgresMigrationRunner(
+  new PostgreSQLConnection('127.0.0.1', 5432, 'test'),
+  migrations: [
+    new UserMigration(),
+    new TodoMigration(),
+  ],
+);
 
-   int get pageCount;
-
-   String get genre;
-}
+main(List<String> args) => runMigrations(migrationRunner, args);
