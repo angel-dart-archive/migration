@@ -12,3 +12,11 @@ builders:
     applies_builders:
       - angel_serialize_generator|angel_serialize
       - angel_orm_generator|angel_orm
+      - angel_migration_runner|migration_info_cleanup
+post_process_builders:
+  migration_info_cleanup:
+    import: "package:angel_migration_runner/builders.dart"
+    builder_factory: migrationInfoCleanup
+    defaults:
+      release_options:
+        enabled: True
