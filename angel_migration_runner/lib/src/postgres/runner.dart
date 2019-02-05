@@ -115,7 +115,6 @@ class PostgresMigrationRunner implements MigrationRunner {
     Iterable<String> existing = r.expand((x) => x).cast<String>();
     var toRun = existing.where(migrations.containsKey);
 
-
     if (toRun.isNotEmpty) {
       for (var k in toRun) {
         var migration = migrations[k];
