@@ -1,3 +1,6 @@
+# 2.0.0-alpha.3
+* Run migrations in reverse on `rollback`.
+
 # 2.0.0-alpha.2
 * Run migrations in reverse on `reset`.
 

@@ -92,7 +92,7 @@ class PostgresMigrationRunner implements MigrationRunner {
     });
 
     if (toRun.isNotEmpty) {
-      for (var k in toRun) {
+      for (var k in toRun.reversed) {
         var migration = migrations[k];
         var schema = new PostgresSchema();
         migration.down(schema);
@@ -113,11 +113,8 @@ class PostgresMigrationRunner implements MigrationRunner {
     var r = await connection
         .query('SELECT path from migrations ORDER BY batch DESC;');
     Iterable<String> existing = r.expand((x) => x).cast<String>();
-    List<String> toRun = [];
+    var toRun = existing.where(migrations.containsKey);
 
-    migrations.forEach((k, v) {
-      if (existing.contains(k)) toRun.add(k);
-    });
 
     if (toRun.isNotEmpty) {
       for (var k in toRun) {
