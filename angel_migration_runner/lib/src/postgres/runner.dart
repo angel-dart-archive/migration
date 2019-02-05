@@ -110,7 +110,8 @@ class PostgresMigrationRunner implements MigrationRunner {
   @override
   Future reset() async {
     await _init();
-    var r = await connection.query('SELECT path from migrations;');
+    var r = await connection
+        .query('SELECT path from migrations ORDER BY batch DESC;');
     Iterable<String> existing = r.expand((x) => x).cast<String>();
     List<String> toRun = [];
 

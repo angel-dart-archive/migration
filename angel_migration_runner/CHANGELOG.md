@@ -1,3 +1,9 @@
+# 2.0.0-alpha.2
+* Run migrations in reverse on `reset`.
+
+# 2.0.0-alpha.1
+* Cast Iterables via `.cast()`, rather than `as`.
+
 # 2.0.0-alpha
 * Dart 2 update.
 
