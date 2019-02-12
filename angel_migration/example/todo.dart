@@ -29,7 +29,7 @@ class TodoMigration implements Migration {
     schema.create('todos', (table) {
       table
         ..serial('id').primaryKey()
-        ..integer('user_id').references('user', 'id').onDeleteCascade()
+        ..integer('user_id').references('users', 'id').onDeleteCascade()
         ..varChar('text')
         ..boolean('completed').defaultsTo(false);
     });

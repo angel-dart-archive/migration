@@ -4,7 +4,8 @@ import 'package:postgres/postgres.dart';
 import '../../angel_migration/example/todo.dart';
 
 var migrationRunner = new PostgresMigrationRunner(
-  new PostgreSQLConnection('127.0.0.1', 5432, 'test'),
+  new PostgreSQLConnection('127.0.0.1', 5432, 'test',
+      username: 'postgres', password: 'postgres'),
   migrations: [
     new UserMigration(),
     new TodoMigration(),
