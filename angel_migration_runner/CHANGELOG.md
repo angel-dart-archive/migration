@@ -1,3 +1,6 @@
+# 2.0.0-alpha.4
+* Include the names of migration classes when running.
+
 # 2.0.0-alpha.3
 * Run migrations in reverse on `rollback`.
 
